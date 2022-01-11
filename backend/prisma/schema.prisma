@@ -1,0 +1,64 @@
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Posto {
+  id         String     @id @default(uuid())
+  email      String     @unique
+  nome       String?
+  telefone   String?
+  telefone2  String?
+  telefone3  String?
+  tipoPosto  TipoPosto  @default(CAPITAL)
+  servidores Servidor[]
+  profile    Profile?
+}
+
+model Profile {
+  id      String @id @default(uuid())
+  posto   Posto  @relation(fields: [postoId], references: [id])
+  postoId String
+}
+
+model Servidor {
+  id                 String       @id @default(uuid())
+  nome               String
+  telefone           String
+  matricula          String
+  rg                 String
+  endereco           String
+  cargo              String
+  data_de_nascimento String
+  frequencia         Frequencia[]
+  tipoDoServidor     TipoServidor @default(FUNCIONARIO)
+
+  Posto Posto[] @relation(references: [id])
+}
+
+model Frequencia {
+  id         Int    @id @default(autoincrement())
+  periodo    String
+  status     String
+  observacao String
+
+  Servidor   Servidor? @relation(fields: [servidorId], references: [id])
+  servidorId String?
+}
+
+enum TipoServidor {
+  COORDENADOR
+  FUNCIONARIO
+  CARGO
+}
+
+enum TipoPosto {
+  CAPITAL
+  INTERIOR
+  MOVEL
+}
