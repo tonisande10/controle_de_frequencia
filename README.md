@@ -12,3 +12,4 @@ Desde Frequência à dados telefonicos e informações de contato.
 **Dev(s)**
 
 - Patrick Rocha Moreira
+- Antônio Sande
